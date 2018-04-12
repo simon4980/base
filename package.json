@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-ruby-sass": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-cssnano": "latest",
+    "gulp-concat": "latest",
+    "gulp-uglify": "latest",
+    "gulp-imagemin": "latest",
+    "gulp-notify": "latest",
+    "gulp-rename": "latest",
+    "gulp-connect": "latest",
+    "gulp-cache": "latest"
+  }
+}
