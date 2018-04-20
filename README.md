@@ -1,16 +1,26 @@
+Base project using gulp for website builds.  
+
+## Only make changes in the src directory.  All files will be generated and moved to the dist directory.  
+
+Inline feature will only inline files if the inline flag is added to each css and js link in the html document. For example:     `<link rel="stylesheet" type="text/css" href="css/app.css" inline >`
+
+
 ## Steps
 * Run `npm install` from the root directory of the project.
+* Run `mkdir dist/img` in project root.
+* Run `mkdir src/img` in project root.
 * Run `gulp` to start task runner which will also start up a local server. 
 
 ## Project structure
 root
 * gruntfile.js
 * package.json
-* assets/
+* src/
+  * html/
   * scss/
   * img/
   * scripts/
-* site/
+* dist/
   * index.html
   * css/
   * js/

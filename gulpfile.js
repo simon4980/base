@@ -12,68 +12,81 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
+    // notify = require('gulp-notify'),
     cache = require('gulp-cache'),
-    connect = require('gulp-connect');
+    connect = require('gulp-connect'),
+    inlinesource = require('gulp-inline-source');
+
 
 
 // Styles
 gulp.task('styles', function() {
-    return sass('assets/scss/*.scss', { style: 'expanded' })
+    return sass('src/scss/*.scss', { style: 'expanded' })
         .pipe(autoprefixer('last 2 version'))
-        .pipe(concat('main.css'))
-        .pipe(gulp.dest('site/css'))
+        .pipe(concat('app.css'))
+        .pipe(gulp.dest('dist/css'))
         .pipe(rename({ suffix: '.min' }))
         .pipe(cssnano())
-        .pipe(gulp.dest('site/css'))
-        .pipe(connect.reload())
-        .pipe(notify({ message: 'Styles task complete' }));
+        .pipe(gulp.dest('dist/css'))
+        .pipe(connect.reload());
+        // .pipe(notify({ message: 'Styles task complete' }));
 });
 
 // Scripts
 gulp.task('scripts', function() {
-    return gulp.src('assets/scripts/*.js')
+    return gulp.src('src/scripts/*.js')
         // .pipe(jshint('.jshintrc'))
         // .pipe(jshint.reporter('default'))
-        .pipe(concat('main.js'))
-        .pipe(gulp.dest('site/js'))
+        .pipe(concat('app.js'))
+        .pipe(gulp.dest('dist/js'))
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify())
-        .pipe(gulp.dest('site/js'))
-        .pipe(connect.reload())
-        .pipe(notify({ message: 'Scripts task complete' }));
+        .pipe(gulp.dest('dist/js'))
+        .pipe(connect.reload());
+        // .pipe(notify({ message: 'Scripts task complete' }));
 });
 
 // Images
 gulp.task('images', function() {
-    return gulp.src('assets/img/**/*')
+    return gulp.src('src/img/**/*')
         .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-        .pipe(gulp.dest('site/img'))
-        .pipe(connect.reload())
-        .pipe(notify({ message: 'Images task complete' }));
+        .pipe(gulp.dest('dist/img'))
+        .pipe(connect.reload());
+        // .pipe(notify({ message: 'Images task complete' }));
+});
+
+// Copy html file from src/html to dist/
+gulp.task("copy-html", ['styles', 'scripts'], function () {
+    return gulp.src('src/html/*.html')
+        .pipe(inlinesource({rootpath: 'dist/'}))
+        .pipe(gulp.dest("dist"))
+        .pipe(connect.reload());
 });
 
 // Watch
 gulp.task('watch', function() {
 
     // Watch .scss files
-    gulp.watch('assets/scss/**/*.scss', ['styles']);
+    gulp.watch('src/scss/**/*.scss', ['styles', 'copy-html']);
 
     // Watch .js files
-    gulp.watch('assets/scripts/**/*.js', ['scripts']);
+    gulp.watch('src/scripts/**/*.js', ['scripts', 'copy-html']);
 
     // Watch image files
-    gulp.watch('assets/img/**/*', ['images']);
+    gulp.watch('src/img/**/*', ['images']);
+
+    // Watch html files
+    gulp.watch('src/html/*.html', ['copy-html']);
 
 });
 
 // Live server reload
 gulp.task('connect', function() {
     connect.server({
-      root: 'site/.',
+      root: 'dist/.',
       livereload: true
     })
 });
 
-gulp.task('default', ['styles', 'scripts', 'images', 'connect', 'watch']);
+gulp.task('default', ['styles', 'scripts', 'images', 'copy-html', 'connect', 'watch']);
 

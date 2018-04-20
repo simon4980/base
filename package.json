@@ -7,9 +7,9 @@
     "gulp-concat": "latest",
     "gulp-uglify": "latest",
     "gulp-imagemin": "latest",
-    "gulp-notify": "latest",
     "gulp-rename": "latest",
     "gulp-connect": "latest",
-    "gulp-cache": "latest"
+    "gulp-cache": "latest",
+    "gulp-inline-source": "^3.1.0"
   }
 }
